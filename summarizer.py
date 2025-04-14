@@ -28,7 +28,7 @@ def fetch_youtube_transcript(video_id):
         # Combine all transcript text
         full_transcript = " ".join([entry['text'] for entry in transcript])
         return full_transcript
-    except Exception as e:
+    except Exception:
         return None
 
 # Function to split large text into smaller chunks
@@ -81,11 +81,16 @@ def summarize_transcript(transcript, mode):
 # Function to translate text into target language
 def translate_text(text, target_language):
     if target_language == "Original":  # No translation needed
-        return text
+        return
     try:
         translator = Translator()
-        translated_text = translator.translate(text, dest=target_language).text
-        return translated_text
+        if text:
+            assert isinstance(text, str), "Text must be a string."
+            # Translate the text
+            translated_text = translator.translate(text, dest=target_language).text
+            return translated_text
+        else:
+            return "Error: No text provided for translation."
     except Exception as e:
         return f"Error translating text: {e}"
 
@@ -116,7 +121,7 @@ def main():
     )  
     
         
-    if st.button("Start"):
+    if st.button("Summarize"):
         video_id = extract_video_id(youtube_url)
         if video_id:
             # with st.spinner("Fetching transcript..."):
@@ -130,6 +135,7 @@ def main():
                 # st.write("✅ Summary generated successfully!")
                 st.subheader("Summary:")
                 st.write(summary)
+                summary = str(summary)  # Ensure summary is a string for translation
                 
                 # Translate transcript if needed
                 if st.session_state.language != "Original":  
