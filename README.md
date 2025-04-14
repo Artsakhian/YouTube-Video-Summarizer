@@ -42,8 +42,7 @@ Usage
 streamlit run summarizer.py
 ```    
 2.  Open the URL provided by Streamlit in your browser. You should see this:
-
-![App Interface](media\interface.png)
+![App Interface](media/interface.png)
 
     
 3.  Input the following:
